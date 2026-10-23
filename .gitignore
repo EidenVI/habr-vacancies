@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+
+data/raw/listings/*.html
+!data/raw/listings/test_page1.html
+data/raw/vacancies/*.html
+data/processed/*
+!data/processed/.gitkeep
+data/filtered/*
+!data/filtered/.gitkeep

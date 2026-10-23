@@ -1,0 +1,5 @@
+requests
+fake-headers
+beautifulsoup4
+lxml
+pandas
