@@ -1,191 +1,225 @@
 <div align="center">
 
-Habr Career Analytics
+# 📊 habr-vacancies
 
-A data analytics project based on job market data from Habr Career.
+**What does the analytics job market actually pay, and which skills does it ask for?**
+A reproducible pipeline that scrapes [Habr Career](https://career.habr.com) vacancies, cleans them, stores them in SQLite and turns them into answers with SQL, pandas and a BI dashboard.
 
-Collecting, processing, and analyzing IT job vacancies to explore labor market trends, in-demand skills, and salary distributions.
+![Python](https://img.shields.io/badge/python-3.10%2B-blue?logo=python&logoColor=white)
+![SQLite](https://img.shields.io/badge/storage-SQLite-003B57?logo=sqlite&logoColor=white)
+![pandas](https://img.shields.io/badge/analysis-pandas-150458?logo=pandas&logoColor=white)
+![Status](https://img.shields.io/badge/status-work%20in%20progress-orange)
+![License](https://img.shields.io/badge/license-MIT-green)
 
-<br>
+[Why](#why-this-project) · [Findings](#key-findings) · [How it works](#how-it-works) · [Quick start](#quick-start) · [Data model](#data-model) · [Roadmap](#roadmap)
+
 </div>
 
-⸻
+---
 
-Overview
+## Why this project
 
-Habr Career Analytics is a Python-based project for collecting and analyzing job vacancy data from Habr Career.
+Job boards show vacancies one at a time. This project collects them into one clean dataset so you can ask questions the website can't answer:
 
-The project implements a data pipeline that extracts vacancy information, parses structured data, normalizes fields, and stores the results in an SQLite database.
+- How much do analysts earn at each grade (Junior → Lead)?
+- Which skills appear in the most vacancies, and which come with higher pay?
+- How many employers actually disclose a salary?
+- Remote vs. office: does it change the offer?
 
-The collected dataset is intended for further exploratory data analysis (EDA) and visualization.
+Every number can be traced back to a saved HTML page, and re-running the pipeline never requests a page it already has.
 
-Project goals
+## Key findings
 
-* Collect job vacancies and their descriptions.
-* Extract structured information, including salaries, locations, employment types, and skills.
-* Normalize and clean collected data.
-* Build a structured dataset for analytical purposes.
-* Identify trends in the IT job market.
-* Analyze salary distributions and demand for technical skills.
+> 🚧 **Placeholder: fill this section from the notebook once the analysis is done.**
+> Put 3–5 headline numbers here, each with its sample size, e.g.
+> *"Median salary for Middle analysts: X ₽ (n = N vacancies with a disclosed salary)."*
 
-Architecture
+| Question | Answer | Sample |
+| --- | --- | --- |
+| Median salary by grade | _TBD_ | _n = ?_ |
+| Top 5 skills | _TBD_ | _n = ?_ |
+| Share of vacancies with a disclosed salary | _TBD_ | _n = ?_ |
 
-flowchart TD
-    A["Habr Career"] --> B["HTML Collection"]
-    B --> C["Vacancy Parsing"]
-    C --> D[("SQLite Database")]
-    D --> E["Data Cleaning"]
-    E --> F["Exploratory Data Analysis"]
-    F --> G["Data Visualization"]
-    style A fill:#E8F0FE,stroke:#4285F4,color:#174EA6
-    style D fill:#E6F4EA,stroke:#34A853,color:#137333
-    style F fill:#FFF4E5,stroke:#FBBC04,color:#8A4B08
-    style G fill:#F3E8FD,stroke:#A142F4,color:#681DA8
+<!-- Add 1–2 charts from reports/figures/ and a screenshot of the BI dashboard from dashboards/ -->
 
-Tech Stack
+## How it works
 
-Category	Technologies
-Language	Python
-Data collection	Requests, BeautifulSoup4
-HTML parsing	BeautifulSoup4, lxml
-Data processing	Pandas
-Database	SQLite
-Data format	JSON
-Configuration	python-dotenv
+```mermaid
+flowchart LR
+    A[Habr Career<br/>listing + vacancy pages] -->|fetcher: timeout, delay, cache| B[(data/raw<br/>saved HTML)]
+    B --> C[parser<br/>JSON embedded in the page]
+    C --> D[cleaning<br/>currency, salary, skills, text]
+    D --> E[(SQLite<br/>vacancies.db)]
+    E --> F[CSV export]
+    F -.-> G[Notebook<br/>pandas · matplotlib]
+    F -.-> H[BI dashboard]
+    E -.-> I[SQL queries]
+```
 
-Project Structure
+Solid arrows are implemented, dotted ones are planned. `pipeline.py` is the only module that calls the others: the fetcher knows nothing about HTML, the parser knows nothing about the network, and storage knows nothing about the website.
 
-habr-career-analytics/
-│
-├── data/
-│   ├── raw/
-│   │   ├── listings/           # Downloaded vacancy listing pages
-│   │   └── vacancies/          # Downloaded individual vacancy pages
-│   │
-│   ├── dictionaries/
-│   │   └── skills_dictionary.json
-│   │
-│   └── processed/              # Processed datasets
-│
-├── src/
-│   ├── fetcher.py              # HTML downloading
-│   ├── parser.py               # Vacancy data extraction
-│   ├── models.py               # Vacancy data model
-│   ├── storage.py              # SQLite and CSV operations
-│   ├── cleaning.py             # Data cleaning and normalization
-│   ├── pipeline.py             # Main data pipeline
-│   └── schema.sql              # Database schema
-│
-├── tests/
-│   └── test_vacancy1.html      # Sample vacancy page
-│
-├── notebooks/                  # Exploratory data analysis
-│
-├── .env.example
-├── .gitignore
-├── requirements.txt
-└── README.md
+### Design decisions worth a look
 
-Getting Started
+- **Vacancy pages are parsed from embedded JSON, not CSS classes.** Each vacancy page ships its data as JSON inside a `script` tag. Reading that is more stable than chasing class names that change with every redesign.
+- **Raw HTML is cached on disk.** Re-parsing after a code change costs zero requests, and the saved pages are the source of truth.
+- **Idempotent writes.** Vacancies are upserted by `vacancy_id`, so re-running the pipeline never creates duplicates.
+- **Estimated salary is kept apart from the real one.** For vacancies without a salary the site shows a calculator-based estimate. It goes into separate columns (`predicted_salary_*`) so it can never leak into salary statistics.
+- **Skills come from two sources.** The structured skill list of the vacancy is merged with skills found in the description text through an external alias dictionary. Matching is by whole word, so `R` does not match inside `Redis`.
+- **Clean values out of the box.** Descriptions are converted to plain text, currency codes are normalized (`RUR` → `RUB`) and salaries are stored as integers.
 
-1. Clone the repository
+### Skills dictionary
 
-git clone <REPOSITORY_URL>
-cd habr-career-analytics
+`data/dictionaries/skills_dictionary.json` maps a canonical skill name to the spellings that should count as that skill. New spellings are added to the JSON file, not to the code:
 
-2. Create a virtual environment
+```json
+{
+  "power bi": ["power bi", "powerbi", "пауэр би"]
+}
+```
+
+## Quick start
+
+```bash
+git clone https://github.com/EidenVI/habr-vacancies.git
+cd habr-vacancies
 
 python -m venv .venv
-
-Activate it:
-
-macOS / Linux
-
-source .venv/bin/activate
-
-Windows
-
-.venv\Scripts\activate
-
-3. Install dependencies
-
+source .venv/bin/activate          # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 
-4. Configure environment variables
-
-Create a .env file in the project root:
-
-BASE_URL=https://career.habr.com
-URL_ANALYTICS_TEMPLATE=https://career.habr.com/vacancies?page={page}
-VACANCY_URL_TEMPLATE=https://career.habr.com/vacancies/{vacancy_id}
-MAX_PAGES=10
-DATABASE_PATH=data/vacancies.db
-OUTPUT_CSV_PATH=data/processed/vacancies.csv
-
-Adjust the listing URL to the search query or vacancy category you want to collect.
-
-5. Run the pipeline
-
-From the project root:
-
+cp .env.example .env               # then edit the values
 python src/pipeline.py
+```
 
-The pipeline downloads listing pages and individual vacancies, extracts structured information, stores records in SQLite, and exports the dataset to CSV.
+Start with `MAX_PAGES=1` while testing: the first run downloads every page, later runs read them from the cache.
 
-Make sure the environment variables are configured and the export path is passed to export_csv() in the pipeline.
+### Configuration
 
-Data Processing
+Settings live in `.env` (never committed; `.env.example` shows the keys).
 
-The project extracts and processes the following vacancy attributes:
+| Variable | Meaning |
+| --- | --- |
+| `BASE_URL` | Site root, used to build absolute vacancy links |
+| `URL_ANALYTICS_TEMPLATE` | Listing URL for the analytics category, with a `{page}` placeholder |
+| `URL_TEMPLATE` | Generic listing URL with a `{page}` placeholder |
+| `VACANCY_URL_TEMPLATE` | Vacancy page URL with a `{vacancy_id}` placeholder |
+| `MAX_PAGES` | How many listing pages to read |
+| `DATABASE_PATH` | SQLite file, e.g. `data/vacancies.db` |
+| `OUTPUT_CSV_PATH` | CSV export, e.g. `data/processed/vacancies.csv` |
 
-Attribute	Description
-Vacancy ID	Unique vacancy identifier
-Title	Vacancy title
-Company	Employer name
-Grade	Required experience level
-City	Job location
-Employment	Employment type
-Remote	Remote work availability
-Salary	Salary range and currency
-Predicted salary	Website salary estimate
-Published at	Vacancy publication date
-Skills	Structured and description-derived skills
-Description	Cleaned vacancy description
-Scraped at	Data collection timestamp
+### Take a first look at the data
 
-Skills are extracted from two sources:
+```bash
+sqlite3 data/vacancies.db "SELECT COUNT(*) FROM vacancies;"
+```
 
-* Structured data — skills provided directly by Habr Career.
-* Vacancy description — additional skills identified using a custom dictionary of keywords and their variations.
+Vacancies per grade and how many of them disclose a salary:
 
-Planned Features
+```sql
+SELECT grade,
+       COUNT(*)                                   AS vacancies,
+       SUM(salary_from IS NOT NULL
+           OR  salary_to IS NOT NULL)             AS with_salary
+FROM vacancies
+GROUP BY grade
+ORDER BY vacancies DESC;
+```
 
-* HTML collection
-* Vacancy parsing
-* SQLite storage with upsert support
-* CSV export
-* Salary and currency normalization
-* Description cleaning
-* Skill extraction using a custom dictionary
-* Data quality checks
-* Exploratory Data Analysis (EDA)
-* Salary distribution analysis
-* Skill demand analysis
-* OLAP-style multidimensional analysis
-* Interactive analytics dashboard
+Ten most requested skills (skills are stored as a JSON array, `json_each` unpacks it):
 
-Dashboard
+```sql
+SELECT j.value AS skill, COUNT(*) AS vacancies
+FROM vacancies, json_each(vacancies.skills) AS j
+GROUP BY j.value
+ORDER BY vacancies DESC
+LIMIT 10;
+```
 
-Coming soon.
+## Data model
 
-An interactive dashboard will be added to explore vacancy statistics, salary distributions, and the demand for specific technologies and skills.
+One row per vacancy in the `vacancies` table:
 
-⸻
+| Column | Type | Notes |
+| --- | --- | --- |
+| `vacancy_id` | INTEGER, PK | taken from the site |
+| `url`, `title` | TEXT | required |
+| `company`, `grade`, `city`, `employment` | TEXT | `NULL` if missing |
+| `is_remote` | INTEGER | 1, 0 or `NULL` |
+| `salary_from`, `salary_to` | INTEGER | salary stated by the employer |
+| `salary_currency` | TEXT | normalized, e.g. `RUB` |
+| `predicted_salary_from`, `predicted_salary_to` | INTEGER | the site's estimate, **not** a real salary |
+| `published_at` | TEXT | ISO date |
+| `skills` | TEXT | JSON array of skill names |
+| `description` | TEXT | plain text |
+| `scraped_at` | TEXT | when the page was parsed |
 
-<div align="center">
+Missing values are stored as `NULL`, never as `0` or an empty string. The schema lives in [`sqlite.sql`](sqlite.sql).
 
-Habr Career Analytics
+> `skills`, `vacancy_skills` and `vacancy_queries` tables already exist in the schema but are not populated yet. Skills are currently stored as a JSON array in the `vacancies` table; the plan is to normalize them so that "top skills" becomes a plain `JOIN` + `GROUP BY` and BI tools can use them directly.
 
-Exploring the IT job market through data.
+## Project structure
 
-</div>
+```text
+habr-vacancies/
+├── src/
+│   ├── models.py        # Vacancy dataclass
+│   ├── fetcher.py       # downloads pages: cache, timeout, delay
+│   ├── parser.py        # HTML -> Vacancy
+│   ├── cleaning.py      # salary, currency, skills, description text
+│   ├── storage.py       # SQLite upsert, CSV export
+│   └── pipeline.py      # runs the steps in order
+├── data/
+│   ├── dictionaries/    # skills_dictionary.json (alias -> skill)
+│   ├── raw/             # saved HTML (listings/, vacancies/), git-ignored
+│   └── processed/       # CSV export for pandas and BI
+├── sqlite.sql           # database schema
+├── tests/               # saved pages for parser checks
+├── docs/                # notes on the site structure
+├── notebooks/           # analysis (planned)
+├── sql/                 # analytical queries (planned)
+├── reports/figures/     # charts for this README (planned)
+└── dashboards/          # BI screenshots and project file (planned)
+```
+
+## Tech stack
+
+| Layer | Tools |
+| --- | --- |
+| Collection | `requests`, `BeautifulSoup` + `lxml`, `fake-headers`, `python-dotenv` |
+| Storage | SQLite (`sqlite3`), plain SQL |
+| Processing | `pandas` |
+| Planned | `numpy`, `matplotlib`, a BI tool for the dashboard |
+
+## Limitations (read before trusting the numbers)
+
+- The dataset is a **snapshot** of one site on the date in `scraped_at`, not the whole market.
+- **Many vacancies do not disclose a salary.** Salary statistics describe only those that do, and they may differ from the rest.
+- Salaries are compared **within one currency** (RUB by default).
+- Skills found in descriptions depend on the dictionary: a skill missing from it is not detected.
+- Every statistic is reported together with its sample size; small groups are not interpreted.
+
+## Responsible scraping
+
+This is an educational project. It reads only public pages, waits between requests, caches everything it downloads, and collects no personal data. Check the site's `robots.txt` and terms of use before running it, and keep the request volume low. The scraped content belongs to its authors, so raw HTML and the database are not published in this repository.
+
+## Roadmap
+
+- [x] Fetcher with on-disk cache, timeout and delay
+- [x] Listing and vacancy parsers (embedded JSON)
+- [x] `Vacancy` model, cleaning and the skills dictionary
+- [ ] SQLite storage with idempotent upsert and CSV export _(in progress)_
+- [ ] Normalized `skills` / `vacancy_skills` tables
+- [ ] Several specializations (data, BI, product, system analyst)
+- [ ] Logging and skipping of broken pages
+- [ ] Analysis notebook (salary by grade, top skills, remote vs office)
+- [ ] SQL queries cross-checked against pandas
+- [ ] BI dashboard with filters
+- [ ] Parser tests on saved pages
+
+## Contributing
+
+Issues and pull requests are welcome, especially new entries for the skills dictionary, analysis ideas or parser edge cases.
+
+## License
+
+Code is released under the [MIT License](LICENSE).
