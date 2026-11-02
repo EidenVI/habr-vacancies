@@ -1,0 +1,889 @@
+{
+  "Data Analysis": [
+    "data analysis",
+    "data analytics",
+    "анализ данных",
+    "аналитика данных",
+    "аналитический анализ"
+  ],
+  "Business Intelligence": [
+    "business intelligence",
+    "business analytics",
+    "бизнес-аналитика",
+    "bi аналитика",
+    "bi-системы"
+  ],
+  "Exploratory Data Analysis": [
+    "exploratory data analysis",
+    "eda",
+    "разведочный анализ данных",
+    "исследовательский анализ данных"
+  ],
+  "Data Visualization": [
+    "data visualization",
+    "data visualisation",
+    "визуализация данных",
+    "визуальный анализ данных"
+  ],
+  "Data Storytelling": [
+    "data storytelling",
+    "сторителлинг данных",
+    "представление результатов анализа"
+  ],
+  "Reporting": [
+    "reporting",
+    "аналитическая отчетность",
+    "аналитическая отчётность",
+    "подготовка отчетов",
+    "подготовка отчётов"
+  ],
+  "Dashboarding": [
+    "dashboarding",
+    "dashboards",
+    "дашборды",
+    "разработка дашбордов",
+    "создание дашбордов"
+  ],
+  "KPI": [
+    "key performance indicators",
+    "ключевые показатели эффективности",
+    "показатели эффективности"
+  ],
+  "Metrics": [
+    "product metrics",
+    "business metrics",
+    "метрики продукта",
+    "бизнес-метрики",
+    "метрики"
+  ],
+  "Product Analytics": [
+    "product analytics",
+    "продуктовая аналитика",
+    "продуктовый анализ"
+  ],
+  "Web Analytics": [
+    "web analytics",
+    "веб-аналитика",
+    "интернет-аналитика"
+  ],
+  "Marketing Analytics": [
+    "marketing analytics",
+    "маркетинговая аналитика",
+    "анализ маркетинга"
+  ],
+  "Financial Analytics": [
+    "financial analytics",
+    "финансовая аналитика",
+    "финансовый анализ"
+  ],
+  "Sales Analytics": [
+    "sales analytics",
+    "аналитика продаж",
+    "анализ продаж"
+  ],
+  "Customer Analytics": [
+    "customer analytics",
+    "клиентская аналитика",
+    "анализ клиентов"
+  ],
+  "HR Analytics": [
+    "hr analytics",
+    "people analytics",
+    "hr-аналитика",
+    "кадровая аналитика"
+  ],
+  "Cohort Analysis": [
+    "cohort analysis",
+    "когортный анализ"
+  ],
+  "Funnel Analysis": [
+    "funnel analysis",
+    "воронка продаж",
+    "анализ воронки",
+    "вороночный анализ"
+  ],
+  "RFM Analysis": [
+    "rfm analysis",
+    "rfm-анализ"
+  ],
+  "ABC Analysis": [
+    "abc analysis",
+    "abc-анализ"
+  ],
+  "XYZ Analysis": [
+    "xyz analysis",
+    "xyz-анализ"
+  ],
+  "A/B Testing": [
+    "a/b testing",
+    "ab testing",
+    "a/b тестирование",
+    "ab-тестирование",
+    "сплит-тестирование"
+  ],
+  "Experiment Design": [
+    "experimental design",
+    "design of experiments",
+    "дизайн экспериментов",
+    "планирование экспериментов"
+  ],
+  "Hypothesis Testing": [
+    "hypothesis testing",
+    "проверка гипотез",
+    "статистическая проверка гипотез"
+  ],
+  "Statistical Analysis": [
+    "statistical analysis",
+    "статистический анализ",
+    "прикладная статистика"
+  ],
+  "Descriptive Statistics": [
+    "descriptive statistics",
+    "описательная статистика"
+  ],
+  "Mathematical Statistics": [
+    "mathematical statistics",
+    "математическая статистика"
+  ],
+  "Probability Theory": [
+    "probability theory",
+    "теория вероятностей"
+  ],
+  "Regression Analysis": [
+    "regression analysis",
+    "регрессионный анализ",
+    "линейная регрессия",
+    "логистическая регрессия"
+  ],
+  "Correlation Analysis": [
+    "correlation analysis",
+    "корреляционный анализ"
+  ],
+  "Time Series Analysis": [
+    "time series analysis",
+    "анализ временных рядов",
+    "временные ряды"
+  ],
+  "Forecasting": [
+    "forecasting",
+    "forecasting methods",
+    "прогнозирование",
+    "методы прогнозирования"
+  ],
+  "Causal Inference": [
+    "causal inference",
+    "причинно-следственный анализ",
+    "каузальный анализ"
+  ],
+  "Sampling": [
+    "sampling",
+    "выборка",
+    "методы выборки"
+  ],
+  "Data Quality": [
+    "data quality",
+    "качество данных",
+    "контроль качества данных"
+  ],
+  "Data Cleaning": [
+    "data cleaning",
+    "data cleansing",
+    "очистка данных",
+    "предобработка данных"
+  ],
+  "Data Wrangling": [
+    "data wrangling",
+    "подготовка данных",
+    "преобразование данных"
+  ],
+  "Data Mining": [
+    "data mining",
+    "интеллектуальный анализ данных",
+    "извлечение знаний из данных"
+  ],
+  "SQL": [
+    "structured query language",
+    "язык структурированных запросов",
+    "sql-запросы",
+    "sql"
+  ],
+  "PostgreSQL": [
+    "postgresql",
+    "postgres",
+    "постгрес"
+  ],
+  "MySQL": [
+    "mysql"
+  ],
+  "SQLite": [
+    "sqlite"
+  ],
+  "Microsoft SQL Server": [
+    "microsoft sql server",
+    "ms sql server",
+    "mssql",
+    "sql server"
+  ],
+  "Oracle Database": [
+    "oracle database",
+    "oracle db",
+    "oracle"
+  ],
+  "ClickHouse": [
+    "clickhouse",
+    "кликхаус"
+  ],
+  "Greenplum": [
+    "greenplum"
+  ],
+  "DuckDB": [
+    "duckdb"
+  ],
+  "BigQuery": [
+    "google bigquery",
+    "bigquery"
+  ],
+  "Snowflake": [
+    "snowflake"
+  ],
+  "Amazon Redshift": [
+    "amazon redshift",
+    "redshift"
+  ],
+  "Vertica": [
+    "vertica"
+  ],
+  "Apache Druid": [
+    "apache druid",
+    "druid"
+  ],
+  "Trino": [
+    "trino",
+    "presto sql"
+  ],
+  "Apache Hive": [
+    "apache hive",
+    "hive"
+  ],
+  "MongoDB": [
+    "mongodb",
+    "mongo db"
+  ],
+  "Redis": [
+    "redis"
+  ],
+  "Elasticsearch": [
+    "elasticsearch",
+    "elastic search"
+  ],
+  "Apache Cassandra": [
+    "apache cassandra",
+    "cassandra"
+  ],
+  "Database Design": [
+    "database design",
+    "проектирование баз данных",
+    "проектирование бд"
+  ],
+  "Data Modeling": [
+    "data modeling",
+    "data modelling",
+    "моделирование данных"
+  ],
+  "Dimensional Modeling": [
+    "dimensional modeling",
+    "dimensional modelling",
+    "измерительное моделирование"
+  ],
+  "Star Schema": [
+    "star schema",
+    "звезда",
+    "схема звезда",
+    "схема «звезда»"
+  ],
+  "Snowflake Schema": [
+    "snowflake schema",
+    "схема снежинка",
+    "схема «снежинка»"
+  ],
+  "Fact Table": [
+    "fact table",
+    "таблица фактов"
+  ],
+  "Dimension Table": [
+    "dimension table",
+    "таблица измерений",
+    "справочник измерений"
+  ],
+  "OLAP": [
+    "online analytical processing",
+    "olap",
+    "оперативная аналитическая обработка"
+  ],
+  "OLAP Cubes": [
+    "olap cube",
+    "olap cubes",
+    "olap-куб",
+    "olap-кубы",
+    "аналитический куб",
+    "аналитические кубы",
+    "многомерный куб",
+    "многомерные кубы"
+  ],
+  "Multidimensional Analysis": [
+    "multidimensional analysis",
+    "многомерный анализ",
+    "многомерная аналитика"
+  ],
+  "MDX": [
+    "mdx",
+    "multidimensional expressions"
+  ],
+  "DAX": [
+    "dax",
+    "data analysis expressions"
+  ],
+  "Tabular Model": [
+    "tabular model",
+    "табличная модель данных",
+    "табличная модель"
+  ],
+  "Semantic Layer": [
+    "semantic layer",
+    "семантический слой"
+  ],
+  "OLTP": [
+    "online transaction processing",
+    "oltp",
+    "транзакционная обработка"
+  ],
+  "OLAP vs OLTP": [
+    "olap/oltp",
+    "olap и oltp"
+  ],
+  "Data Warehouse": [
+    "data warehouse",
+    "data warehousing",
+    "dwh",
+    "хранилище данных",
+    "хранилища данных"
+  ],
+  "Data Mart": [
+    "data mart",
+    "data marts",
+    "витрина данных",
+    "витрины данных"
+  ],
+  "ETL": [
+    "etl",
+    "extract transform load",
+    "извлечение преобразование загрузка"
+  ],
+  "ELT": [
+    "elt",
+    "extract load transform"
+  ],
+  "Data Integration": [
+    "data integration",
+    "интеграция данных"
+  ],
+  "Data Pipeline": [
+    "data pipeline",
+    "data pipelines",
+    "пайплайн данных",
+    "конвейер данных"
+  ],
+  "Data Lake": [
+    "data lake",
+    "озеро данных"
+  ],
+  "Data Lakehouse": [
+    "data lakehouse",
+    "lakehouse",
+    "лейкхаус"
+  ],
+  "Slowly Changing Dimensions": [
+    "slowly changing dimensions",
+    "scd",
+    "медленно меняющиеся измерения"
+  ],
+  "Power BI": [
+    "power bi",
+    "powerbi",
+    "пауэр би"
+  ],
+  "Tableau": [
+    "tableau"
+  ],
+  "Microsoft Excel": [
+    "microsoft excel",
+    "ms excel",
+    "excel",
+    "эксель"
+  ],
+  "Google Sheets": [
+    "google sheets",
+    "гугл таблицы"
+  ],
+  "Looker": [
+    "looker"
+  ],
+  "Looker Studio": [
+    "looker studio",
+    "google data studio",
+    "data studio"
+  ],
+  "Qlik Sense": [
+    "qlik sense",
+    "клик сенс"
+  ],
+  "QlikView": [
+    "qlikview",
+    "qlik view"
+  ],
+  "FineBI": [
+    "finebi",
+    "fine bi"
+  ],
+  "Apache Superset": [
+    "apache superset",
+    "superset"
+  ],
+  "Metabase": [
+    "metabase"
+  ],
+  "Redash": [
+    "redash"
+  ],
+  "Grafana": [
+    "grafana"
+  ],
+  "Yandex DataLens": [
+    "yandex datalens",
+    "datalens",
+    "яндекс даталенс"
+  ],
+  "Apache Zeppelin": [
+    "apache zeppelin",
+    "zeppelin"
+  ],
+  "Jupyter Notebook": [
+    "jupyter notebook",
+    "jupyter"
+  ],
+  "Python": [
+    "python",
+    "питон"
+  ],
+  "R": [
+    "r language",
+    "язык r",
+    "программирование на r",
+    "r programming"
+  ],
+  "Pandas": [
+    "pandas"
+  ],
+  "NumPy": [
+    "numpy"
+  ],
+  "Polars": [
+    "polars"
+  ],
+  "SciPy": [
+    "scipy"
+  ],
+  "Statsmodels": [
+    "statsmodels",
+    "stats models"
+  ],
+  "Scikit-learn": [
+    "scikit-learn",
+    "sklearn",
+    "scikit learn"
+  ],
+  "Matplotlib": [
+    "matplotlib"
+  ],
+  "Seaborn": [
+    "seaborn"
+  ],
+  "Plotly": [
+    "plotly"
+  ],
+  "Bokeh": [
+    "bokeh"
+  ],
+  "PySpark": [
+    "pyspark",
+    "python spark"
+  ],
+  "Apache Spark": [
+    "apache spark",
+    "spark framework"
+  ],
+  "Dask": [
+    "dask"
+  ],
+  "SQLAlchemy": [
+    "sqlalchemy"
+  ],
+  "Requests": [
+    "python requests",
+    "requests library"
+  ],
+  "Beautiful Soup": [
+    "beautiful soup",
+    "beautifulsoup",
+    "bs4"
+  ],
+  "Scrapy": [
+    "scrapy"
+  ],
+  "Selenium": [
+    "selenium"
+  ],
+  "Playwright": [
+    "playwright"
+  ],
+  "Apache Airflow": [
+    "apache airflow",
+    "airflow"
+  ],
+  "dbt": [
+    "dbt",
+    "data build tool"
+  ],
+  "Apache Kafka": [
+    "apache kafka",
+    "kafka"
+  ],
+  "Apache Hadoop": [
+    "apache hadoop",
+    "hadoop"
+  ],
+  "Apache Flink": [
+    "apache flink",
+    "flink"
+  ],
+  "Apache Beam": [
+    "apache beam",
+    "beam"
+  ],
+  "Apache NiFi": [
+    "apache nifi",
+    "nifi"
+  ],
+  "Dagster": [
+    "dagster"
+  ],
+  "Prefect": [
+    "prefect"
+  ],
+  "Apache Iceberg": [
+    "apache iceberg",
+    "iceberg"
+  ],
+  "Delta Lake": [
+    "delta lake",
+    "deltalake"
+  ],
+  "Apache Hudi": [
+    "apache hudi",
+    "hudi"
+  ],
+  "Machine Learning": [
+    "machine learning",
+    "машинное обучение",
+    "ml-модели",
+    "ml модель"
+  ],
+  "Deep Learning": [
+    "deep learning",
+    "глубокое обучение"
+  ],
+  "Neural Networks": [
+    "neural networks",
+    "нейронные сети"
+  ],
+  "XGBoost": [
+    "xgboost"
+  ],
+  "LightGBM": [
+    "lightgbm",
+    "light gbm"
+  ],
+  "CatBoost": [
+    "catboost",
+    "cat boost"
+  ],
+  "TensorFlow": [
+    "tensorflow"
+  ],
+  "Keras": [
+    "keras"
+  ],
+  "PyTorch": [
+    "pytorch",
+    "torch"
+  ],
+  "Computer Vision": [
+    "computer vision",
+    "компьютерное зрение"
+  ],
+  "OpenCV": [
+    "opencv",
+    "open cv"
+  ],
+  "YOLO": [
+    "you only look once",
+    "yolo"
+  ],
+  "Natural Language Processing": [
+    "natural language processing",
+    "nlp",
+    "обработка естественного языка"
+  ],
+  "Large Language Models": [
+    "large language models",
+    "large language model",
+    "llm",
+    "llms",
+    "большие языковые модели"
+  ],
+  "Generative AI": [
+    "generative ai",
+    "генеративный искусственный интеллект",
+    "генеративный ии"
+  ],
+  "Transformers": [
+    "transformers",
+    "трансформеры"
+  ],
+  "Hugging Face": [
+    "hugging face",
+    "huggingface"
+  ],
+  "Recommendation Systems": [
+    "recommendation systems",
+    "recommender systems",
+    "рекомендательные системы"
+  ],
+  "Anomaly Detection": [
+    "anomaly detection",
+    "обнаружение аномалий"
+  ],
+  "Clustering": [
+    "clustering",
+    "кластеризация"
+  ],
+  "Classification": [
+    "classification",
+    "классификация"
+  ],
+  "Regression": [
+    "regression",
+    "регрессия"
+  ],
+  "Feature Engineering": [
+    "feature engineering",
+    "создание признаков",
+    "генерация признаков"
+  ],
+  "MLflow": [
+    "mlflow"
+  ],
+  "Kubeflow": [
+    "kubeflow"
+  ],
+  "Weights & Biases": [
+    "weights & biases",
+    "wandb"
+  ],
+  "ONNX": [
+    "onnx"
+  ],
+  "LangChain": [
+    "langchain"
+  ],
+  "LlamaIndex": [
+    "llamaindex",
+    "llama index"
+  ],
+  "Linear Algebra": [
+    "linear algebra",
+    "линейная алгебра"
+  ],
+  "Calculus": [
+    "calculus",
+    "математический анализ"
+  ],
+  "Git": [
+    "git",
+    "система контроля версий git"
+  ],
+  "GitHub": [
+    "github"
+  ],
+  "GitLab": [
+    "gitlab"
+  ],
+  "Docker": [
+    "docker"
+  ],
+  "Kubernetes": [
+    "kubernetes",
+    "k8s"
+  ],
+  "Linux": [
+    "linux"
+  ],
+  "Bash": [
+    "bash",
+    "bash scripting",
+    "bash-скрипты"
+  ],
+  "PowerShell": [
+    "powershell"
+  ],
+  "Jenkins": [
+    "jenkins"
+  ],
+  "GitHub Actions": [
+    "github actions"
+  ],
+  "GitLab CI/CD": [
+    "gitlab ci/cd",
+    "gitlab ci"
+  ],
+  "CI/CD": [
+    "ci/cd",
+    "continuous integration",
+    "continuous delivery",
+    "непрерывная интеграция",
+    "непрерывная доставка"
+  ],
+  "Terraform": [
+    "terraform"
+  ],
+  "Ansible": [
+    "ansible"
+  ],
+  "Prometheus": [
+    "prometheus"
+  ],
+  "Nginx": [
+    "nginx"
+  ],
+  "AWS": [
+    "amazon web services",
+    "aws"
+  ],
+  "Microsoft Azure": [
+    "microsoft azure",
+    "azure"
+  ],
+  "Google Cloud Platform": [
+    "google cloud platform",
+    "google cloud",
+    "gcp"
+  ],
+  "Yandex Cloud": [
+    "yandex cloud",
+    "яндекс облако"
+  ],
+  "REST API": [
+    "rest api",
+    "restful api",
+    "rest"
+  ],
+  "GraphQL": [
+    "graphql"
+  ],
+  "gRPC": [
+    "grpc"
+  ],
+  "JSON": [
+    "json"
+  ],
+  "XML": [
+    "xml"
+  ],
+  "YAML": [
+    "yaml",
+    "yml"
+  ],
+  "Apache Parquet": [
+    "apache parquet",
+    "parquet"
+  ],
+  "Apache Avro": [
+    "apache avro",
+    "avro"
+  ],
+  "Apache ORC": [
+    "apache orc",
+    "orc format"
+  ],
+  "Pytest": [
+    "pytest"
+  ],
+  "Unit Testing": [
+    "unit testing",
+    "модульное тестирование"
+  ],
+  "Integration Testing": [
+    "integration testing",
+    "интеграционное тестирование"
+  ],
+  "Postman": [
+    "postman"
+  ],
+  "Swagger": [
+    "swagger"
+  ],
+  "OpenAPI": [
+    "openapi",
+    "open api"
+  ],
+  "Agile": [
+    "agile"
+  ],
+  "Scrum": [
+    "scrum"
+  ],
+  "Kanban": [
+    "kanban"
+  ],
+  "Jira": [
+    "jira"
+  ],
+  "Confluence": [
+    "confluence"
+  ],
+  "Business Analysis": [
+    "business analysis",
+    "бизнес-анализ",
+    "бизнес анализ"
+  ],
+  "Requirements Analysis": [
+    "requirements analysis",
+    "анализ требований"
+  ],
+  "UML": [
+    "uml"
+  ],
+  "BPMN": [
+    "bpmn"
+  ],
+  "Microsoft Visio": [
+    "microsoft visio",
+    "visio"
+  ],
+  "1C": [
+    "1c",
+    "1с",
+    "1c:enterprise",
+    "1с:предприятие"
+  ]
+}

@@ -1,6 +1,7 @@
 import sqlite3
 import json
 import os
+
 from pathlib import Path
 
 import pandas as pd
@@ -17,11 +18,10 @@ SQLITE_PATH = os.getenv("DATABASE_PATH")
 BASE_DIR = Path(__file__).resolve().parent
 
 
-def init_db() -> None:
-    """Создаёт таблицы базы данных по схеме schema.sql."""
-
+def get_db_path() -> Path:
+    """Resolve the database path and create its parent directory."""
     if not SQLITE_PATH:
-        raise ValueError("DATABASE_PATH не указан в .env")
+        raise ValueError("DATABASE_PATH is not specified in .env")
 
     db_path = Path(SQLITE_PATH)
 
@@ -30,24 +30,23 @@ def init_db() -> None:
 
     db_path.parent.mkdir(parents=True, exist_ok=True)
 
+    return db_path
+
+
+def init_db() -> None:
+    """Initialize database tables using the schema.sql file."""
+    db_path = get_db_path()
     schema_path = BASE_DIR / "schema.sql"
 
     with sqlite3.connect(db_path) as conn:
         conn.executescript(schema_path.read_text(encoding="utf-8"))
 
-    print(f"База данных инициализирована: {db_path}")
+    print(f"Database initialized: {db_path}")
 
 
 def upsert_vacancy(vacancy: Vacancy) -> None:
-    """Добавляет вакансию или обновляет её, если она уже существует."""
-
-    if not SQLITE_PATH:
-        raise ValueError("DATABASE_PATH не указан в .env")
-
-    db_path = Path(SQLITE_PATH)
-
-    if not db_path.is_absolute():
-        db_path = BASE_DIR.parent / db_path
+    """Insert a vacancy or update its existing record."""
+    db_path = get_db_path()
 
     query = """
         INSERT INTO vacancies (
@@ -115,15 +114,8 @@ def upsert_vacancy(vacancy: Vacancy) -> None:
 
 
 def export_csv(path: str | Path) -> None:
-    """Экспортирует все вакансии из SQLite в CSV."""
-
-    if not SQLITE_PATH:
-        raise ValueError("DATABASE_PATH не указан в .env")
-
-    db_path = Path(SQLITE_PATH)
-
-    if not db_path.is_absolute():
-        db_path = BASE_DIR.parent / db_path
+    """Export all vacancy records from SQLite to a CSV file."""
+    db_path = get_db_path()
 
     path = Path(path)
 
@@ -145,26 +137,24 @@ def export_csv(path: str | Path) -> None:
         encoding="utf-8-sig"
     )
 
-    print(f"Успешно экспортировано {len(df)} вакансий в: {path}")
+    print(f"Successfully exported {len(df)} vacancies to: {path}")
 
 
-def save_csv(vacancies: list[Vacancy], path: Path) -> None:
-    """Сохраняет список вакансий в CSV."""
-
+def save_csv(vacancies: list[Vacancy], path: str | Path) -> None:
+    """Save a list of vacancy objects directly to a CSV file."""
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
 
     rows = []
 
     for vacancy in vacancies:
-        row = vacancy.__dict__.copy()
+        row = vacancy.to_dict()
 
-        # Сохраняем список навыков в CSV в виде JSON.
-        if row.get("skills") is not None:
-            row["skills"] = json.dumps(
-                row["skills"],
-                ensure_ascii=False
-            )
+        # Serialize the skills list as JSON to store it in a single CSV cell.
+        row["skills"] = json.dumps(
+            row["skills"],
+            ensure_ascii=False
+        )
 
         rows.append(row)
 
@@ -177,4 +167,4 @@ def save_csv(vacancies: list[Vacancy], path: Path) -> None:
         encoding="utf-8-sig"
     )
 
-    print(f"Успешно сохранено {len(df)} вакансий в: {path}")
+    print(f"Successfully saved {len(df)} vacancies to: {path}")

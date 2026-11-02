@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 from dataclasses import asdict, dataclass
 
 
@@ -15,12 +16,17 @@ class Vacancy:
     salary_from: int | None
     salary_to: int | None
     salary_currency: str | None
-    predicted_salary_from: int | None   # оценка калькулятора сайта, не зарплата из вакансии
+
+    # Estimated salary range provided by the website's salary calculator.
+    # These values are separate from the salary specified in the vacancy.
+    predicted_salary_from: int | None
     predicted_salary_to: int | None
+
     published_at: str | None
     skills: list[str]
     description: str | None
     scraped_at: str
 
     def to_dict(self) -> dict:
+        """Convert the vacancy object into a dictionary."""
         return asdict(self)
