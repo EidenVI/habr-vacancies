@@ -1,12 +1,38 @@
-.venv/
-__pycache__/
-*.pyc
-.DS_Store
+Python
 
-data/raw/listings/*.html
+.venv/
+pycache/
+*.py[cod]
+*.egg-info/
+
+Environment variables
+
+.env
+
+IDE and OS
+
+.DS_Store
+.idea/
+.vscode/
+
+Raw HTML data
+
+data/raw/listings/.html
 !data/raw/listings/test_page1.html
-data/raw/vacancies/*.html
+data/raw/vacancies/.html
+
+Processed data
+
 data/processed/*
 !data/processed/.gitkeep
+
+Filtered data
+
 data/filtered/*
 !data/filtered/.gitkeep
+
+Databases
+
+*.db
+*.sqlite
+*.sqlite3
