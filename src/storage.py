@@ -34,9 +34,9 @@ def get_db_path() -> Path:
 
 
 def init_db() -> None:
-    """Initialize database tables using the schema.sql file."""
+    """Initialize database tables using the sqlite.sql file."""
     db_path = get_db_path()
-    schema_path = BASE_DIR / "schema.sql"
+    schema_path = BASE_DIR.parent / "sqlite.sql"
 
     with sqlite3.connect(db_path) as conn:
         conn.executescript(schema_path.read_text(encoding="utf-8"))
