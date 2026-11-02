@@ -1,38 +1,33 @@
-Python
-
+# Python
 .venv/
-pycache/
+__pycache__/
 *.py[cod]
 *.egg-info/
 
-Environment variables
-
+# Environment variables (keep .env.example in the repo)
 .env
 
-IDE and OS
-
+# IDE and OS
 .DS_Store
 .idea/
 .vscode/
 
-Raw HTML data
-
-data/raw/listings/.html
+# Raw HTML cache (site content is not republished)
+data/raw/listings/*
+!data/raw/listings/.gitkeep
 !data/raw/listings/test_page1.html
-data/raw/vacancies/.html
+data/raw/vacancies/*
+!data/raw/vacancies/.gitkeep
 
-Processed data
-
+# Generated exports
 data/processed/*
 !data/processed/.gitkeep
 
-Filtered data
-
-data/filtered/*
-!data/filtered/.gitkeep
-
-Databases
-
+# Databases
 *.db
 *.sqlite
-*.sqlite3data/raw/
+*.sqlite3
+/database
+
+# Logs
+logs/
