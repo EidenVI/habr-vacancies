@@ -18,7 +18,7 @@ SQLITE_PATH = os.getenv("DATABASE_PATH")
 BASE_DIR = Path(__file__).resolve().parent
 
 # Tables exported to CSV for pandas and BI tools.
-EXPORT_TABLES = ("vacancies", "skills", "vacancy_skills", "vacancy_queries")
+EXPORT_TABLES = ("vacancies", "vacancies_analytics", "skills", "vacancy_skills", "vacancy_queries")
 
 
 def get_db_path() -> Path:
