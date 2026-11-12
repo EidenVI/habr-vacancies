@@ -105,7 +105,7 @@ Settings live in `.env` (never committed; `.env.example` shows the keys).
 | `VACANCY_URL_TEMPLATE` | Vacancy page URL with a `{vacancy_id}` placeholder |
 | `MAX_PAGES` | How many listing pages to read |
 | `DATABASE_PATH` | SQLite file, e.g. `data/vacancies.db` |
-| `OUTPUT_CSV_PATH` | CSV export, e.g. `data/processed/vacancies.csv` |
+| `OUTPUT_CSV_PATH` | File for the `vacancies` CSV export, e.g. `data/processed/vacancies.csv`; `skills.csv`, `vacancy_skills.csv` and `vacancy_queries.csv` are written next to it |
 
 ### Take a first look at the data
 
@@ -125,12 +125,13 @@ GROUP BY grade
 ORDER BY vacancies DESC;
 ```
 
-Ten most requested skills (skills are stored as a JSON array, `json_each` unpacks it):
+Ten most requested skills:
 
 ```sql
-SELECT j.value AS skill, COUNT(*) AS vacancies
-FROM vacancies, json_each(vacancies.skills) AS j
-GROUP BY j.value
+SELECT s.name AS skill, COUNT(*) AS vacancies
+FROM vacancy_skills vs
+JOIN skills s ON s.skill_id = vs.skill_id
+GROUP BY s.skill_id
 ORDER BY vacancies DESC
 LIMIT 10;
 ```
@@ -155,7 +156,36 @@ One row per vacancy in the `vacancies` table:
 
 Missing values are stored as `NULL`, never as `0` or an empty string. The schema lives in [`sqlite.sql`](sqlite.sql).
 
-> `skills`, `vacancy_skills` and `vacancy_queries` tables already exist in the schema but are not populated yet. Skills are currently stored as a JSON array in the `vacancies` table; the plan is to normalize them so that "top skills" becomes a plain `JOIN` + `GROUP BY` and BI tools can use them directly.
+Skills are normalized: each skill is stored once in `skills`, and `vacancy_skills` links skills to vacancies (many-to-many). That makes "top skills" a plain `JOIN` + `GROUP BY` and lets BI tools use them directly. `vacancy_queries` records which search query found a vacancy and will be filled once several specializations are collected.
+
+```mermaid
+erDiagram
+    VACANCIES ||--o{ VACANCY_SKILLS : has
+    SKILLS ||--o{ VACANCY_SKILLS : "used in"
+    VACANCIES ||--o{ VACANCY_QUERIES : "found by"
+
+    VACANCIES {
+        int vacancy_id PK
+        text title
+        text grade
+        int salary_from
+        int salary_to
+    }
+    SKILLS {
+        int skill_id PK
+        text name UK
+    }
+    VACANCY_SKILLS {
+        int vacancy_id FK
+        int skill_id FK
+    }
+    VACANCY_QUERIES {
+        int vacancy_id FK
+        text query
+    }
+```
+
+Only key columns are shown in the diagram; the full list is in the table above. Foreign keys use `ON DELETE CASCADE`, and every connection enables `PRAGMA foreign_keys` so the database enforces them.
 
 ## Project structure
 
@@ -207,8 +237,8 @@ This is an educational project. It reads only public pages, waits between reques
 - [x] Fetcher with on-disk cache, timeout and delay
 - [x] Listing and vacancy parsers (embedded JSON)
 - [x] `Vacancy` model, cleaning and the skills dictionary
-- [ ] SQLite storage with idempotent upsert and CSV export _(in progress)_
-- [ ] Normalized `skills` / `vacancy_skills` tables
+- [x] SQLite storage with idempotent upsert and CSV export
+- [x] Normalized `skills` / `vacancy_skills` tables
 - [ ] Several specializations (data, BI, product, system analyst)
 - [ ] Logging and skipping of broken pages
 - [ ] Analysis notebook (salary by grade, top skills, remote vs office)

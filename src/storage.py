@@ -2,6 +2,7 @@ import sqlite3
 import json
 import os
 
+from contextlib import contextmanager
 from pathlib import Path
 
 import pandas as pd
@@ -9,13 +10,15 @@ from dotenv import load_dotenv
 
 from models import Vacancy
 
-
 load_dotenv()
 
 CSV_REL_PATH = os.getenv("OUTPUT_CSV_PATH")
 SQLITE_PATH = os.getenv("DATABASE_PATH")
 
 BASE_DIR = Path(__file__).resolve().parent
+
+# Tables exported to CSV for pandas and BI tools.
+EXPORT_TABLES = ("vacancies", "vacancies_analytics", "skills", "vacancy_skills", "vacancy_queries")
 
 
 def get_db_path() -> Path:
@@ -33,43 +36,57 @@ def get_db_path() -> Path:
     return db_path
 
 
+@contextmanager
+def _connect():
+    """Open a connection with foreign keys enabled.
+
+    SQLite ignores foreign keys (and ON DELETE CASCADE) unless the pragma is
+    switched on for every new connection. The block commits on success, rolls
+    back on error and always closes the connection.
+    """
+    conn = sqlite3.connect(get_db_path())
+    conn.execute("PRAGMA foreign_keys = ON")
+
+    try:
+        with conn:
+            yield conn
+    finally:
+        conn.close()
+
+
 def init_db() -> None:
     """Initialize database tables using the sqlite.sql file."""
-    db_path = get_db_path()
     schema_path = BASE_DIR.parent / "sqlite.sql"
 
-    with sqlite3.connect(db_path) as conn:
+    with _connect() as conn:
         conn.executescript(schema_path.read_text(encoding="utf-8"))
 
-    print(f"Database initialized: {db_path}")
+    print(f"Database initialized: {get_db_path()}")
+
+
+def clean_db() -> None:
+    """Delete all data from the database but keep the tables."""
+    with _connect() as conn:
+        # Children first, parents last.
+        for table in ("vacancy_skills", "vacancy_queries", "skills", "vacancies"):
+            conn.execute(f"DELETE FROM {table}")
+
+        # Restart the AUTOINCREMENT counter of the skills table.
+        conn.execute("DELETE FROM sqlite_sequence WHERE name = 'skills'")
+
+    print("Database cleaned: all rows deleted")
 
 
 def upsert_vacancy(vacancy: Vacancy) -> None:
-    """Insert a vacancy or update its existing record."""
-    db_path = get_db_path()
-
-    query = """
+    """Insert or update a vacancy and synchronize its skill relations."""
+    vacancy_query = """
         INSERT INTO vacancies (
-            vacancy_id,
-            url,
-            title,
-            company,
-            grade,
-            city,
-            employment,
-            is_remote,
-            salary_from,
-            salary_to,
-            salary_currency,
-            predicted_salary_from,
-            predicted_salary_to,
-            published_at,
-            skills,
-            description,
-            scraped_at
+            vacancy_id, url, title, company, grade, city, employment,
+            is_remote, salary_from, salary_to, salary_currency,
+            predicted_salary_from, predicted_salary_to, published_at,
+            description, scraped_at
         )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ON CONFLICT(vacancy_id) DO UPDATE SET
             url = excluded.url,
             title = excluded.title,
@@ -84,7 +101,6 @@ def upsert_vacancy(vacancy: Vacancy) -> None:
             predicted_salary_from = excluded.predicted_salary_from,
             predicted_salary_to = excluded.predicted_salary_to,
             published_at = excluded.published_at,
-            skills = excluded.skills,
             description = excluded.description,
             scraped_at = excluded.scraped_at
     """
@@ -104,40 +120,62 @@ def upsert_vacancy(vacancy: Vacancy) -> None:
         vacancy.predicted_salary_from,
         vacancy.predicted_salary_to,
         vacancy.published_at,
-        json.dumps(vacancy.skills, ensure_ascii=False),
         vacancy.description,
         vacancy.scraped_at,
     )
 
-    with sqlite3.connect(db_path) as conn:
-        conn.execute(query, values)
+    skills = {s.strip().lower() for s in vacancy.skills if s and s.strip()}
+
+    with _connect() as conn:
+        # Upsert main vacancy record
+        conn.execute(vacancy_query, values)
+
+        # Reset existing skill links for idempotency
+        conn.execute(
+            "DELETE FROM vacancy_skills WHERE vacancy_id = ?",
+            (vacancy.vacancy_id,),
+        )
+
+        # Ensure skills exist in the dictionary and link them to the vacancy
+        for skill in skills:
+            conn.execute("INSERT OR IGNORE INTO skills (name) VALUES (?)", (skill,))
+            conn.execute(
+                """
+                INSERT INTO vacancy_skills (vacancy_id, skill_id)
+                SELECT ?, skill_id FROM skills WHERE name = ?
+                """,
+                (vacancy.vacancy_id, skill),
+            )
 
 
 def export_csv(path: str | Path) -> None:
-    """Export all vacancy records from SQLite to a CSV file."""
-    db_path = get_db_path()
+    """Export every table to CSV.
 
+    `path` is the file for the vacancies table. The other tables are written
+    next to it: skills.csv, vacancy_skills.csv and vacancy_queries.csv.
+    """
     path = Path(path)
 
     if not path.is_absolute():
         path = BASE_DIR.parent / path
 
-    path.parent.mkdir(parents=True, exist_ok=True)
+    out_dir = path.parent
+    out_dir.mkdir(parents=True, exist_ok=True)
 
-    with sqlite3.connect(db_path) as conn:
-        df = pd.read_sql_query(
-            "SELECT * FROM vacancies",
-            conn
-        )
+    with _connect() as conn:
+        for table in EXPORT_TABLES:
+            df = pd.read_sql_query(f"SELECT * FROM {table}", conn)
 
-    df.to_csv(
-        path,
-        index=False,
-        sep=";",
-        encoding="utf-8-sig"
-    )
+            file_path = path if table == "vacancies" else out_dir / f"{table}.csv"
 
-    print(f"Successfully exported {len(df)} vacancies to: {path}")
+            df.to_csv(
+                file_path,
+                index=False,
+                sep=";",
+                encoding="utf-8-sig"
+            )
+
+            print(f"Exported {len(df)} rows from '{table}' to: {file_path}")
 
 
 def save_csv(vacancies: list[Vacancy], path: str | Path) -> None:

@@ -36,6 +36,7 @@ def run() -> None:
     vacancies_dir = BASE_DIR / "data" / "raw" / "vacancies"
 
     vacancies: list[Vacancy] = []
+    skipped: list[int] = []
 
     for page_number in range(1, MAX_PAGES + 1):
         # Change the URL template to collect vacancies from another job category.
@@ -72,9 +73,17 @@ def run() -> None:
                 continue
 
             vacancy_html = vacancy_path.read_text(encoding="utf-8")
-            vacancy = parse_vacancy_page(html=vacancy_html)
+
+            try:
+                vacancy = parse_vacancy_page(html=vacancy_html)
+            except (ValueError, KeyError, TypeError, AttributeError) as e:
+                print(f"Skipping vacancy {vacancy_id}: {type(e).__name__}: {e}")
+                skipped.append(vacancy_id)
+                continue
 
             vacancies.append(vacancy)
+
+            print("Parsed: {N}, skipped: {M}".format(N=len(vacancies), M=len(skipped)))
 
     # Initialize the database before inserting vacancy records.
     init_db()
