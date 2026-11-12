@@ -150,6 +150,7 @@ One row per vacancy in the `vacancies` table:
 | `salary_currency` | TEXT | normalized, e.g. `RUB` |
 | `predicted_salary_from`, `predicted_salary_to` | INTEGER | the site's estimate, **not** a real salary |
 | `published_at` | TEXT | ISO date |
+| `skills` | TEXT | JSON array of skill names |
 | `description` | TEXT | plain text |
 | `scraped_at` | TEXT | when the page was parsed |
 
